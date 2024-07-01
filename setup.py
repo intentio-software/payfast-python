@@ -2,19 +2,8 @@ from setuptools import setup, find_packages
 
 setup(
     name="payfast",
-    version="0.1",
+    version="0.1.2",
     packages=find_packages(),
-    install_requires=[
-        # List dependencies here
-        "requests",
-        "pytz",
-        "pydantic",
-    ],
-    # entry_points={
-    #     "console_scripts": [
-    #         "your_script = your_package.module1:main_function",
-    #     ],
-    # },
     author="Max Dittmar",
     author_email="max@intentio.co.za",
     description="Python library for Payfast by network API",

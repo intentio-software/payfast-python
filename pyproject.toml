@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "payfast"
-version = "0.1"
+version = "0.1.2"
 description = "Python library for Payfast by network API"
 readme = "README.md"
 authors = [{ name = "Max Dittmar", email = "max@intentio.co.za" }]
@@ -13,7 +13,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Development Status :: 3 - Alpha",
 ]
-dependencies = ["requests", "pytz", "pydantic"]
+dependencies = ["requests>=2.0", "pytz>=2021.1", "pydantic>=1.0,<2.0"]
 
 [project.urls]
 Homepage = "https://github.com/intentio-software/payfast-python"
