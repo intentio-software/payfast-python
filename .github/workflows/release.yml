@@ -24,14 +24,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install setuptools wheel twine semantic-release commitizen bump2version
 
-      # - name: Lint commit messages
-      #   run: |
-      #     ~/.local/bin/commitizen check
+      - name: Lint commit messages
+        run: |
+          ~/.local/bin/commitizen check
 
       - name: Determine next version
-        id: semantic_version
+        id: determine_version
         run: |
-          echo "VERSION=$(~/.local/bin/semantic-release print-version)" >> $GITHUB_ENV
+          NEXT_VERSION=$(~/.local/bin/semantic-release print-version)
+          echo "VERSION=$NEXT_VERSION" >> $GITHUB_ENV
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Bump version
         run: |
