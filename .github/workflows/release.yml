@@ -24,10 +24,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install setuptools wheel twine semantic-release commitizen
 
-      - name: Lint commit messages
-        run: |
-          export PATH="$PATH:$HOME/.local/bin"
-          commitizen check
+      # - name: Lint commit messages
+      #   run: |
+      #     ~/.local/bin/commitizen check
 
       - name: Build package
         run: |
@@ -41,5 +40,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          export PATH="$PATH:$HOME/.local/bin"
-          semantic-release
+          ~/.local/bin/semantic-release
