@@ -1,5 +1,12 @@
 from setuptools import setup, find_packages
 
+try:
+    import os
+
+    version = os.getenv("VERSION") or "0.1.3"
+except Exception:
+    version = "0.1.3"
+
 setup(
     name="payfast",
     version="0.1.3",

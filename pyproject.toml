@@ -19,5 +19,9 @@ dependencies = ["requests>=2.0", "pytz>=2021.1", "pydantic>=1.0,<2.0"]
 Homepage = "https://github.com/intentio-software/payfast-python"
 
 [tool.setuptools]
+
+
+[tool.semantic_release]
+version_variable = "your_package/__init__.py:__version__"
 # Specify your packages here
 # packages = [{ include = ["payfast"], exclude = ["tests"] }]

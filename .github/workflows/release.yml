@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
-          pip3 install setuptools wheel twine semantic-release commitizen bump2version
+          pip3 install setuptools wheel twine commitizen bump2version python-semantic-release
 
       # - name: Lint commit messages
       #   run: |
@@ -31,14 +31,14 @@ jobs:
       - name: Determine next version
         id: determine_version
         run: |
-          VERSION=$(npx semantic-release print-version)
+          VERSION=$(python -m semantic_release version)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Bump version
         run: |
-          bump2version --new-version ${{ env.VERSION }} --allow-dirty --verbose
+          bump2version --new-version ${{ env.VERSION }} --allow-dirty --verbose setup.py pyproject.toml
 
       - name: Build package
         run: |
@@ -52,4 +52,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npx semantic-release
+          semantic-release publish
