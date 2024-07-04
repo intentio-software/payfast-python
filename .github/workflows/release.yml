@@ -22,11 +22,20 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install setuptools wheel twine semantic-release commitizen
+          pip install setuptools wheel twine semantic-release commitizen bump2version
 
       # - name: Lint commit messages
       #   run: |
       #     ~/.local/bin/commitizen check
+
+      - name: Determine next version
+        id: semantic_version
+        run: |
+          echo "VERSION=$(~/.local/bin/semantic-release print-version)" >> $GITHUB_ENV
+
+      - name: Bump version
+        run: |
+          bump2version --new-version ${{ env.VERSION }} --allow-dirty patch
 
       - name: Build package
         run: |
