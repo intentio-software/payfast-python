@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="payfast",
-    version="0.1.2",
+    version="0.1.3",
     packages=find_packages(),
     author="Max Dittmar",
     author_email="max@intentio.co.za",

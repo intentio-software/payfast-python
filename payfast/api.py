@@ -17,7 +17,7 @@ class PayfastBodyTokenization(BaseModel):
     amount: int
     item_name: str
     item_description: Optional[str]
-    itn: Optional[bool] = True
+    itn: Optional[bool]
     m_payment_id: Optional[str]
     cc_cvv: Optional[int]
     setup: Optional[str]
@@ -50,13 +50,18 @@ class PayfastAPI:
             data["passphrase"] = self.passphrase
         sortedData = sorted(data)
         for key in sortedData:
-            # Get all the data from Payfast and prepare parameter string
-            payload += (
-                key
-                + "="
-                + urllib.parse.quote_plus(str(data[key]).replace("+", " "))
-                + "&"
-            )
+            if data[key] is not None:
+                if isinstance(data[key], bool):
+                    # Convert boolean to string
+                    data[key] = str(data[key])
+
+                # Get all the data from Payfast and prepare parameter string
+                payload += (
+                    key
+                    + "="
+                    + urllib.parse.quote_plus(str(data[key]).replace("+", " "))
+                    + "&"
+                )
         # After looping through, cut the last & or append your passphrase
         payload = payload[:-1]
         return hashlib.md5(payload.encode()).hexdigest()
@@ -65,10 +70,11 @@ class PayfastAPI:
         # Make a GET request to the Payfast API
         headers = self._generate_headers()
         # Add the signature to the headers
-        headers["signature"] = self._generate_signature(headers)
+        signature = self._generate_signature(headers)
+        headers["signature"] = signature
 
         if self.test_sandbox_mode:
-            query_params["testing"] = True
+            query_params["testing"] = "true"
 
         return self.session.get(
             f"https://api.payfast.co.za/{path}",
@@ -79,6 +85,7 @@ class PayfastAPI:
     def _request_post(self, path: str, body_data: dict) -> requests.Response:
         # Make a POST request to the Payfast API
         headers = self._generate_headers()
+
         # Add the signature to the headers
         signature_payload = {**headers, **body_data}
         headers["signature"] = self._generate_signature(signature_payload)
