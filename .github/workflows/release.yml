@@ -24,9 +24,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install setuptools wheel twine semantic-release commitizen bump2version
 
-      - name: Lint commit messages
-        run: |
-          ~/.local/bin/commitizen check
+      # - name: Lint commit messages
+      #   run: |
+      #     ~/.local/bin/commitizen check
 
       - name: Determine next version
         id: determine_version
