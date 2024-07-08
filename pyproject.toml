@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "payfast"
-version = "0.1.3"
+version = "0.1.4"
 description = "Python library for Payfast by network API"
 readme = "README.md"
 authors = [{ name = "Max Dittmar", email = "max@intentio.co.za" }]

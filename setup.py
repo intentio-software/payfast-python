@@ -3,9 +3,9 @@ from setuptools import setup, find_packages
 try:
     import os
 
-    version = os.getenv("VERSION") or "0.1.3"
+    version = os.getenv("VERSION") or "0.1.4"
 except Exception:
-    version = "0.1.3"
+    version = "0.1.4"
 
 setup(
     name="payfast",
