@@ -16,11 +16,11 @@ class PayfastHeaders(BaseModel):
 class PayfastBodyTokenization(BaseModel):
     amount: int
     item_name: str
-    item_description: Optional[str]
-    itn: Optional[bool]
-    m_payment_id: Optional[str]
-    cc_cvv: Optional[int]
-    setup: Optional[str]
+    item_description: Optional[str] = ""
+    itn: Optional[bool] = None
+    m_payment_id: Optional[str] = ""
+    cc_cvv: Optional[int] = None
+    setup: Optional[str] = None
 
 
 class PayfastAPI:
@@ -46,9 +46,13 @@ class PayfastAPI:
     def _generate_signature(self, data: dict):
         # Generate a signature using the merchant_key
         payload = ""
+
         if self.passphrase != "":
             data["passphrase"] = self.passphrase
         sortedData = sorted(data)
+
+        # remove keys with None values or empty strings
+
         for key in sortedData:
             if data[key] is not None:
                 if isinstance(data[key], bool):
@@ -110,8 +114,13 @@ class PayfastAPI:
             validated_payload = PayfastBodyTokenization(**payload)
 
             try:
+                validated_payload = {
+                    k: v
+                    for k, v in validated_payload.dict().items()
+                    if v is not None and v != ""
+                }
                 response = self._request_post(
-                    f"subscriptions/{token}/adhoc", validated_payload.dict()
+                    f"subscriptions/{token}/adhoc", validated_payload
                 )
                 return response
             except Exception as e:
