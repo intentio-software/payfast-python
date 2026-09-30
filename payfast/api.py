@@ -88,6 +88,17 @@ class PayfastAPI:
 
     def _request_post(self, path: str, body_data: dict) -> requests.Response:
         # Make a POST request to the Payfast API
+        return self._request_with_body("post", path, body_data)
+
+    def _request_put(self, path: str, body_data: dict) -> requests.Response:
+        # Make a PUT request to the Payfast API (pause/unpause/cancel)
+        return self._request_with_body("put", path, body_data)
+
+    def _request_patch(self, path: str, body_data: dict) -> requests.Response:
+        # Make a PATCH request to the Payfast API (update)
+        return self._request_with_body("patch", path, body_data)
+
+    def _request_with_body(self, method: str, path: str, body_data: dict) -> requests.Response:
         headers = self._generate_headers()
 
         # Add the signature to the headers
@@ -101,11 +112,49 @@ class PayfastAPI:
             query_params["testing"] = "true"
             query_params_encoded = "?" + urllib.parse.urlencode(query_params)
 
-        return self.session.post(
+        return self.session.request(
+            method,
             f"https://api.payfast.co.za/{path}{query_params_encoded}",
             headers=headers,
             json=body_data,
         )
+
+    def fetch_subscription(self, token: str) -> requests.Response:
+        """GET the current status/details of a subscription by its token."""
+        return self._request_get(f"subscriptions/{token}/fetch", {})
+
+    def pause_subscription(self, token: str, cycles: int = 1) -> requests.Response:
+        """Skip the next `cycles` billing cycle(s) - the subscription
+        resumes automatically afterward, nothing else needs to call it
+        again."""
+        return self._request_put(f"subscriptions/{token}/pause", {"cycles": cycles})
+
+    def unpause_subscription(self, token: str) -> requests.Response:
+        return self._request_put(f"subscriptions/{token}/unpause", {})
+
+    def cancel_subscription(self, token: str) -> requests.Response:
+        return self._request_put(f"subscriptions/{token}/cancel", {})
+
+    def update_subscription(
+        self,
+        token: str,
+        *,
+        amount: int | None = None,
+        frequency: int | None = None,
+        cycles: int | None = None,
+        run_date: str | None = None,
+    ) -> requests.Response:
+        """`amount` is in cents, matching PayFast's Recurring Billing API
+        convention (NOT the rands-decimal convention checkout.py's
+        `build_checkout_fields` uses for the initial checkout form)."""
+        payload = {
+            "amount": amount,
+            "frequency": frequency,
+            "cycles": cycles,
+            "run_date": run_date,
+        }
+        payload = {k: v for k, v in payload.items() if v is not None}
+        return self._request_patch(f"subscriptions/{token}/update", payload)
 
     def charge_tokenization_payment(self, token: str, payload: dict):
         # check to see if the schema is valid
