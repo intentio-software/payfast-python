@@ -15,6 +15,9 @@ classifiers = [
 ]
 dependencies = ["requests>=2.0", "pytz>=2021.1", "pydantic>=1.0,<2.0"]
 
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
 [project.urls]
 Homepage = "https://github.com/intentio-software/payfast-python"
 
