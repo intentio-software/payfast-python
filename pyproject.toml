@@ -33,6 +33,8 @@ major_on_zero = true
 allow_zero_version = true
 no_git_verify = false
 tag_format = "v{version}"
+version_toml = ["pyproject.toml:project.version"]
+version_variables = ["setup.py:version"]
 
 [tool.semantic_release.branches.main]
 match = "(main|master)"
