@@ -35,21 +35,33 @@ jobs:
       #   run: |
       #     ~/.local/bin/commitizen check
 
+      - name: Determine next version
+        id: version
+        run: |
+          echo "current=$(semantic-release version --print-last-released)" >> "$GITHUB_OUTPUT"
+          echo "next=$(semantic-release version --print)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Bump version, commit, and tag
+        if: steps.version.outputs.current != steps.version.outputs.next
         run: |
           semantic-release version
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build package
+        if: steps.version.outputs.current != steps.version.outputs.next
         run: |
           python setup.py sdist bdist_wheel
 
       - name: Publish package to PyPI
+        if: steps.version.outputs.current != steps.version.outputs.next
         run: |
           twine upload dist/* -u __token__ -p ${{ secrets.PYPI_API_TOKEN }}
 
       - name: Run semantic-release
+        if: steps.version.outputs.current != steps.version.outputs.next
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
