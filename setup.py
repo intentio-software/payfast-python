@@ -5,11 +5,11 @@ try:
 
     version = os.getenv("VERSION") or "0.1.4"
 except Exception:
-    version = "0.1.4"
+    version = "0.1.0"
 
 setup(
     name="payfast",
-    version="0.1.4",
+    version="0.1.0",
     packages=find_packages(),
     author="Max Dittmar",
     author_email="max@intentio.co.za",
