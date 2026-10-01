@@ -9,7 +9,7 @@ except Exception:
 
 setup(
     name="payfast",
-    version="0.1.3",
+    version="0.1.4",
     packages=find_packages(),
     author="Max Dittmar",
     author_email="max@intentio.co.za",
