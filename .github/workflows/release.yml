@@ -26,6 +26,11 @@ jobs:
           python3 -m pip install --upgrade pip
           pip3 install setuptools wheel twine commitizen bump2version python-semantic-release
 
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       # - name: Lint commit messages
       #   run: |
       #     ~/.local/bin/commitizen check
